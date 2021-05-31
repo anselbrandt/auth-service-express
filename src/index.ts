@@ -6,7 +6,7 @@ import cors from "cors";
 dotenv.config();
 import { envVars } from "./views/envVars";
 import credentials from "./constants";
-import { oauth } from "./oauth";
+import { Oauth } from "./oauth";
 import { twitter, github } from "./oauthFlows";
 
 const PORT = process.env["PROXY"] ? 3000 : process.env["PORT"] || 3000;
@@ -21,7 +21,7 @@ const main = async () => {
     TWITTER_CALLBACK,
   } = credentials;
 
-  const githubAuth = await oauth(
+  const githubAuth = await Oauth(
     github({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
@@ -29,7 +29,7 @@ const main = async () => {
     })
   );
 
-  const twitterOauth = await oauth(
+  const twitterOauth = await Oauth(
     twitter({
       clientId: TWITTER_CLIENT_ID,
       clientSecret: TWITTER_CLIENT_SECRET,

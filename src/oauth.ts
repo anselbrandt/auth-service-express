@@ -3,7 +3,7 @@ import { getAuthString } from "./oauthUtils";
 import { Request } from "express";
 import { Provider } from "./types";
 
-export const oauth = async (provider: Provider) => {
+export const Oauth = async (provider: Provider) => {
   const { requestToken, accessToken, profile, credentials, redirect } =
     provider;
 
