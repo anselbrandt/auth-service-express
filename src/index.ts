@@ -7,29 +7,29 @@ dotenv.config();
 import { envVars } from "./views/envVars";
 import credentials from "./constants";
 import { Oauth } from "./oauth";
-import { twitter, github } from "./oauthFlows";
+import { twitter } from "./oauthFlows";
 
 const PORT = process.env["PROXY"] ? 3000 : process.env["PORT"] || 3000;
 
 const main = async () => {
   const {
-    GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET,
-    GITHUB_CALLBACK,
+    // GITHUB_CLIENT_ID,
+    // GITHUB_CLIENT_SECRET,
+    // GITHUB_CALLBACK,
     TWITTER_CLIENT_ID,
     TWITTER_CLIENT_SECRET,
     TWITTER_CALLBACK,
   } = credentials;
 
-  const githubAuth = await Oauth(
-    github({
-      clientId: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_CLIENT_SECRET,
-      callback: GITHUB_CALLBACK,
-    })
-  );
+  // const githubAuth = await Oauth(
+  //   github({
+  //     clientId: GITHUB_CLIENT_ID,
+  //     clientSecret: GITHUB_CLIENT_SECRET,
+  //     callback: GITHUB_CALLBACK,
+  //   })
+  // );
 
-  const twitterOauth = await Oauth(
+  const oauth = await Oauth(
     twitter({
       clientId: TWITTER_CLIENT_ID,
       clientSecret: TWITTER_CLIENT_SECRET,
@@ -45,23 +45,13 @@ const main = async () => {
     })
   );
 
-  app.get("/api/auth/github", async (_, res) => {
-    const redirect = await githubAuth.getRedirect();
-    res.redirect(redirect);
-  });
-
   app.get("/api/auth/twitter", async (_, res) => {
-    const redirect = await twitterOauth.getRedirect();
+    const redirect = await oauth.getRedirect();
     res.redirect(redirect);
-  });
-
-  app.get("/api/auth/callback/github", async (req, res) => {
-    const profile = await githubAuth.getGithubProfile(req);
-    res.send(profile);
   });
 
   app.get("/api/auth/callback/twitter", async (req, res) => {
-    const profile = await twitterOauth.getProfile(req);
+    const profile = await oauth.getProfile(req);
     res.send(profile);
   });
 
