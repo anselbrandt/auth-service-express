@@ -6,9 +6,7 @@ import cors from "cors";
 dotenv.config();
 import { envVars } from "./views/envVars";
 import credentials from "./constants";
-import { Oauth } from "./oauth";
-import { twitter } from "./flows/twitter";
-import { github } from "./flows/github";
+import { Oauth, github, twitter } from "./oauth";
 
 const PORT = process.env["PROXY"] ? 3000 : process.env["PORT"] || 3000;
 
