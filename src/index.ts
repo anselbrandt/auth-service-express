@@ -7,8 +7,8 @@ dotenv.config();
 import { envVars } from "./views/envVars";
 import credentials from "./constants";
 import { Oauth } from "./oauth";
-import { twitter as twitterFlow } from "./flows/twitter";
-import { github as githubFlow } from "./flows/github";
+import { twitter } from "./flows/twitter";
+import { github } from "./flows/github";
 
 const PORT = process.env["PROXY"] ? 3000 : process.env["PORT"] || 3000;
 
@@ -22,20 +22,17 @@ const main = async () => {
     TWITTER_CALLBACK,
   } = credentials;
 
-  const twitter = twitterFlow({
-    clientId: TWITTER_CLIENT_ID,
-    clientSecret: TWITTER_CLIENT_SECRET,
-    callback: TWITTER_CALLBACK,
-  });
-  const github = githubFlow({
-    clientId: GITHUB_CLIENT_ID,
-    clientSecret: GITHUB_CLIENT_SECRET,
-    callback: GITHUB_CALLBACK,
-  });
-
   const oauth = await Oauth({
-    twitter,
-    github,
+    twitter: twitter({
+      clientId: TWITTER_CLIENT_ID,
+      clientSecret: TWITTER_CLIENT_SECRET,
+      callback: TWITTER_CALLBACK,
+    }),
+    github: github({
+      clientId: GITHUB_CLIENT_ID,
+      clientSecret: GITHUB_CLIENT_SECRET,
+      callback: GITHUB_CALLBACK,
+    }),
   });
 
   const app = express();
