@@ -7,35 +7,36 @@ dotenv.config();
 import { envVars } from "./views/envVars";
 import credentials from "./constants";
 import { Oauth } from "./oauth";
-import { twitter } from "./oauthFlows";
+import { twitter as twitterFlow } from "./flows/twitter";
+import { github as githubFlow } from "./flows/github";
 
 const PORT = process.env["PROXY"] ? 3000 : process.env["PORT"] || 3000;
 
 const main = async () => {
   const {
-    // GITHUB_CLIENT_ID,
-    // GITHUB_CLIENT_SECRET,
-    // GITHUB_CALLBACK,
+    GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET,
+    GITHUB_CALLBACK,
     TWITTER_CLIENT_ID,
     TWITTER_CLIENT_SECRET,
     TWITTER_CALLBACK,
   } = credentials;
 
-  // const githubAuth = await Oauth(
-  //   github({
-  //     clientId: GITHUB_CLIENT_ID,
-  //     clientSecret: GITHUB_CLIENT_SECRET,
-  //     callback: GITHUB_CALLBACK,
-  //   })
-  // );
+  const twitter = twitterFlow({
+    clientId: TWITTER_CLIENT_ID,
+    clientSecret: TWITTER_CLIENT_SECRET,
+    callback: TWITTER_CALLBACK,
+  });
+  const github = githubFlow({
+    clientId: GITHUB_CLIENT_ID,
+    clientSecret: GITHUB_CLIENT_SECRET,
+    callback: GITHUB_CALLBACK,
+  });
 
-  const oauth = await Oauth(
-    twitter({
-      clientId: TWITTER_CLIENT_ID,
-      clientSecret: TWITTER_CLIENT_SECRET,
-      callback: TWITTER_CALLBACK,
-    })
-  );
+  const oauth = await Oauth({
+    twitter,
+    github,
+  });
 
   const app = express();
   app.use(
@@ -45,13 +46,15 @@ const main = async () => {
     })
   );
 
-  app.get("/api/auth/twitter", async (_, res) => {
-    const redirect = await oauth.getRedirect();
+  app.get("/api/auth/:provider", async (req, res) => {
+    const provider = req.params.provider;
+    const redirect = await oauth.getRedirect(provider);
     res.redirect(redirect);
   });
 
-  app.get("/api/auth/callback/twitter", async (req, res) => {
-    const profile = await oauth.getProfile(req);
+  app.get("/api/auth/callback/:provider", async (req, res) => {
+    const provider = req.params.provider;
+    const profile = await oauth.getProfile(provider, req);
     res.send(profile);
   });
 

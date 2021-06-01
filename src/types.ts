@@ -5,22 +5,10 @@ export interface Credentials {
 }
 
 export interface Provider {
-  name: string;
-  credentials: Credentials;
-  redirect: {
-    baseUrl: any;
-  };
-  requestToken?: {
-    baseUrl: string;
-    params: object;
-  };
-  accessToken: {
-    baseUrl: any;
-    params?: any;
-  };
-  profile: {
-    baseUrl: string;
-    urlParams: string;
-    params: any;
-  };
+  getRedirect: () => string;
+  getProfile: (req: any) => object;
+}
+
+export interface Providers {
+  [name: string]: Provider;
 }
