@@ -5,8 +5,8 @@ export interface Credentials {
 }
 
 export interface Provider {
-  getRedirect: () => string;
-  getProfile: (req: any) => object;
+  getRedirect: () => Promise<string>;
+  getProfile: (req: any) => Promise<object>;
 }
 
 export interface Providers {
