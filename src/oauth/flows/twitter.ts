@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import fetch from "node-fetch";
-import { getAuthString } from "../oauthUtils";
+import { getAuthString } from "../utils";
 import { Credentials } from "../types";
 import { Request } from "express";
 
