@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "express",
+      "name": "next",
       "script": "npm",
       "args": "start"
     }
