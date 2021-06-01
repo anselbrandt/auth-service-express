@@ -1,5 +1,5 @@
 {
-  "name": "oauth-login",
+  "name": "express",
   "description": "Typescript Express Docker Container",
   "repository": "https://github.com/anselbrandt/oauth-login",
   "keywords": ["node", "typescript", "docker", "heroku", "express", "oauth"]
